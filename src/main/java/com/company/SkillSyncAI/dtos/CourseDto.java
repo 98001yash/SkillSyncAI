@@ -1,6 +1,5 @@
 package com.company.SkillSyncAI.dtos;
 
-import com.company.SkillSyncAI.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,10 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SignupDto {
+public class CourseDto {
 
-    private String name;
-    private String email;
-    private String password;
-    private String role;
+
+    private Long id;
+    private String title;
+    private String description;
+    private Long mentorId;
 }

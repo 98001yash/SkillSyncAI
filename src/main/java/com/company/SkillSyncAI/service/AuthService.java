@@ -45,21 +45,29 @@ public class AuthService {
 
     @Transactional
     public UserDto signup(SignupDto signUpDto){
-        User user = userRepository.findByEmail(signUpDto.getEmail()).orElse(null);
-
-        if(user!=null){
-            throw new RuntimeConflictException("cannot signup, User already exist with email"+signUpDto.getEmail());
+        // Check if the user already exists
+        if (userRepository.findByEmail(signUpDto.getEmail()).isPresent()) {
+            throw new RuntimeConflictException("Cannot signup, User already exists with email " + signUpDto.getEmail());
         }
 
+        // Map DTO to User entity
         User mappedUser = modelMapper.map(signUpDto, User.class);
-        mappedUser.setRoles(Set.of(Role.LEARNER));
+
+        // Assign role based on request, default to LEARNER if not specified
+        Role assignedRole = (signUpDto.getRole() != null && signUpDto.getRole().equals("MENTOR"))
+                ? Role.MENTOR
+                : Role.LEARNER;
+
+        mappedUser.setRoles(Set.of(assignedRole));
         mappedUser.setPassword(passwordEncoder.encode(mappedUser.getPassword()));
+
+        // Save user
         User savedUser = userRepository.save(mappedUser);
 
-
-        //  TODO:  create User related entities
+        // TODO: Create user-related entities if needed
         return modelMapper.map(savedUser, UserDto.class);
     }
+
 
 
     public String refreshToken(String refreshToken){
