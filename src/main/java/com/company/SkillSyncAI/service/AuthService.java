@@ -54,7 +54,7 @@ public class AuthService {
         User mappedUser = modelMapper.map(signUpDto, User.class);
 
         // Assign role based on request, default to LEARNER if not specified
-        Role assignedRole = (signUpDto.getRole() != null && signUpDto.getRole().equals("MENTOR"))
+        Role assignedRole = (signUpDto.getRole() != null && signUpDto.getRole().equalsIgnoreCase("MENTOR"))
                 ? Role.MENTOR
                 : Role.LEARNER;
 
@@ -67,7 +67,6 @@ public class AuthService {
         // TODO: Create user-related entities if needed
         return modelMapper.map(savedUser, UserDto.class);
     }
-
 
 
     public String refreshToken(String refreshToken){
