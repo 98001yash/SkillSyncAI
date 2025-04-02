@@ -17,6 +17,8 @@ import org.apache.coyote.BadRequestException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -59,4 +61,40 @@ public class CourseService {
                 .orElseThrow(()->new ResourceNotFoundException("course not found with ID: "+courseId));
         return modelMapper.map(course, CourseDto.class);
     }
+
+    public List<CourseDto> getAllCourses(){
+        log.info("Fetching all the courses......");
+        List<Course> courses = courseRepository.findAll();
+        return courses
+                .stream()
+                .map(course->modelMapper.map(course, CourseDto.class))
+                .toList();
+    }
+
+
+    public CourseDto updateCourse(Long id, CourseDto courseDto){
+        log.info("Fetching course with ID: {}",id);
+        Course course = courseRepository.findById(id)
+                .orElseThrow(()->{
+                    log.error("Course not found with ID: {}",id);
+                    return new ResourceNotFoundException("Course not found with ID: "+id);
+                });
+
+        modelMapper.map(courseDto, course);
+        Course updatedCourse = courseRepository.save(course);
+        log.info("Course with ID: {} updated successfully", id);
+        return modelMapper.map(updatedCourse, CourseDto.class);
+    }
+
+    public void deleteCourse(Long id){
+        log.info("Checking if course with ID: {} exists",id);
+        Course course = courseRepository.findById(id)
+                .orElseThrow(()->{
+                    log.error("Course not found with ID: {}",id);
+                    return new ResourceNotFoundException("Course not found with ID: "+id);
+                });
+        courseRepository.delete(course);
+        log.info("Course with ID: {} deleted successfully",id);
+    }
+
 }

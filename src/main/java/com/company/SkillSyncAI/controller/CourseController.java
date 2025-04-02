@@ -10,6 +10,8 @@ import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/courses")
 @RequiredArgsConstructor
@@ -34,5 +36,24 @@ public class CourseController {
         log.info("Fetching course details for course ID: {}",courseId);
         CourseDto courseDto = courseService.getCourseById(courseId);
         return ResponseEntity.ok(courseDto);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CourseDto>> getAllCourses(){
+        log.info("Fetching all courses....");
+        return ResponseEntity.ok(courseService.getAllCourses());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CourseDto> updateCourse(@PathVariable Long id, @RequestBody CourseDto courseDto){
+        log.info("Updating a course with ID: {}",id);
+        return ResponseEntity.ok(courseService.updateCourse(id, courseDto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteCourse(@PathVariable Long id){
+        log.info("Deleting course with ID: {}",id);
+        courseService.deleteCourse(id);
+        return ResponseEntity.ok("course deleted successfully");
     }
 }
