@@ -27,4 +27,6 @@ public class Enrollment {
     private Course course;
 
     private LocalDateTime enrollmentDate = LocalDateTime.now();
+
+    private int progress = 0;
 }

@@ -23,4 +23,10 @@ public class Course {
     @ManyToOne
     @JoinColumn(name = "mentor_id")
     private User mentor;
+    private int enrollments;
+
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 }

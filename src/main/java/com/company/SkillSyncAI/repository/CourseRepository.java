@@ -8,4 +8,10 @@ import java.util.List;
 public interface CourseRepository extends JpaRepository<Course,Long> {
 
     List<Course> findByMentorId(Long mentorId);
+
+    List<Course> findTop5ByOrderByEnrollmentsDesc();
+
+    List<Course> findByCategoryIn(List<String> categories);
+
+
 }
