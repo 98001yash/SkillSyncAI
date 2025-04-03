@@ -1,5 +1,6 @@
 package com.company.SkillSyncAI.dtos;
 
+import com.company.SkillSyncAI.entities.Category;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

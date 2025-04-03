@@ -4,6 +4,7 @@ package com.company.SkillSyncAI.service;
 import com.company.SkillSyncAI.dtos.CourseDto;
 import com.company.SkillSyncAI.dtos.CreateCourseRequestDto;
 import com.company.SkillSyncAI.dtos.CreateCourseResponseDto;
+import com.company.SkillSyncAI.entities.Category;
 import com.company.SkillSyncAI.entities.Course;
 import com.company.SkillSyncAI.entities.User;
 import com.company.SkillSyncAI.enums.Role;
@@ -44,6 +45,7 @@ public class CourseService {
         course.setTitle(requestDto.getTitle());
         course.setDescription(requestDto.getDescription());
         course.setMentor(mentor);
+        course.setCategory(requestDto.getCategory()); // Set category
 
         Course savedCourse = courseRepository.save(course);
         log.info("Course created successfully with id: {}", savedCourse.getId());
@@ -71,6 +73,13 @@ public class CourseService {
                 .toList();
     }
 
+    public List<CourseDto> getCoursesByCategory(String category) {
+        log.info("Fetching all courses for category: {}", category);
+        List<Course> courses = courseRepository.findByCategory(category);
+        return courses.stream()
+                .map(course -> modelMapper.map(course, CourseDto.class))
+                .toList();
+    }
 
     public CourseDto updateCourse(Long id, CourseDto courseDto){
         log.info("Fetching course with ID: {}",id);
@@ -86,6 +95,16 @@ public class CourseService {
         return modelMapper.map(updatedCourse, CourseDto.class);
     }
 
+        public CourseDto updateCourseCategory(Long courseId, Category newCategory) {
+        log.info("Updating category for course ID: {} to {}", courseId, newCategory);
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new ResourceNotFoundException("Course not found with ID: " + courseId));
+        course.setCategory(newCategory);
+        Course updatedCourse = courseRepository.save(course);
+        log.info("Course ID: {} category updated successfully", courseId);
+        return modelMapper.map(updatedCourse, CourseDto.class);
+    }
+
     public void deleteCourse(Long id){
         log.info("Checking if course with ID: {} exists",id);
         Course course = courseRepository.findById(id)
@@ -96,5 +115,4 @@ public class CourseService {
         courseRepository.delete(course);
         log.info("Course with ID: {} deleted successfully",id);
     }
-
 }

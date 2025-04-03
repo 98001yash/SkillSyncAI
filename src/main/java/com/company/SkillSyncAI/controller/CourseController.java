@@ -4,7 +4,6 @@ import com.company.SkillSyncAI.dtos.CourseDto;
 import com.company.SkillSyncAI.dtos.CreateCourseRequestDto;
 import com.company.SkillSyncAI.dtos.CreateCourseResponseDto;
 import com.company.SkillSyncAI.service.CourseService;
-import com.company.SkillSyncAI.service.RecommendationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
@@ -20,7 +19,7 @@ import java.util.List;
 public class CourseController {
 
     private final CourseService courseService;
-    private final RecommendationService recommendationService;
+    //private final RecommendationService recommendationService;
 
 
     @PostMapping("/create/{mentorId}")
@@ -61,11 +60,11 @@ public class CourseController {
 
 
 
-    @GetMapping("/recommendations/{userId}")
-    public ResponseEntity<List<CourseDto>> getRecommendations(@PathVariable Long userId){
-        log.info("Request for course recommendation for user {}",userId);
-        return ResponseEntity.ok(recommendationService.recommendCourse(userId));
-    }
+//    @GetMapping("/recommendations/{userId}")
+//    public ResponseEntity<List<CourseDto>> getRecommendations(@PathVariable Long userId){
+//        log.info("Request for course recommendation for user {}",userId);
+//        return ResponseEntity.ok(recommendationService.recommendCourse(userId));
+//    }
 
 
 
